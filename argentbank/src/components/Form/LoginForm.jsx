@@ -1,6 +1,6 @@
-import './Form.css';
+import './LoginForm.css';
 
-function Form() {
+function LoginForm() {
     return (
         <form>
             <div className="input-wrapper">
@@ -20,4 +20,4 @@ function Form() {
     );
 }
 
-export default Form;
+export default LoginForm;

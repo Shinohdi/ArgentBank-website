@@ -1,5 +1,5 @@
 import './SignIn.css';
-import Form from '../../components/Form/Form';
+import LoginForm from '../../components/Form/LoginForm';
 
 function SignIn() {
     return (
@@ -7,7 +7,7 @@ function SignIn() {
             <section className="sign-in-content">
                 <i className="fa fa-user-circle sign-in-icon"></i>
                 <h1>Sign In</h1>
-                <Form />
+                <LoginForm />
             </section>
         </main>
     );
