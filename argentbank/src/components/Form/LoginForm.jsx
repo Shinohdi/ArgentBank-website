@@ -1,19 +1,54 @@
+import { useState } from 'react';
 import './LoginForm.css';
 
 function LoginForm() {
+    const [username, setUserName] = useState('');
+    const [password, setPassword] = useState('');
+
+    async function SubmitLoginForm(event) {
+        event.preventDefault();
+        const submitLog = {
+            email: username,
+            password: password,
+        };
+        const chargeUtile = JSON.stringify(submitLog);
+
+        await fetch('http://localhost:3001/api/v1/user/login', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: chargeUtile,
+        })
+            .then((resp) => resp.json())
+            .then((response) => {
+                if (response.status === 200) {
+                    console.log(response.body.token);
+                } else {
+                    console.log('error');
+                }
+            });
+    }
+
     return (
-        <form>
+        <form onSubmit={(event) => SubmitLoginForm(event)}>
             <div className="input-wrapper">
-                <label for="username">Username</label>
-                <input type="text" id="username" />
+                <label htmlFor="username">Username</label>
+                <input
+                    type="text"
+                    id="username"
+                    onChange={(e) => setUserName(e.target.value)}
+                />
             </div>
             <div className="input-wrapper">
-                <label for="password">Password</label>
-                <input type="password" id="password" />
+                <label htmlFor="password">Password</label>
+                <input
+                    type="password"
+                    id="password"
+                    onChange={(e) => setPassword(e.target.value)}
+                />
             </div>
             <div className="input-remember">
                 <input type="checkbox" id="remember-me" />
-                <label for="remember-me">Remember me</label>
+                <label htmlFor="remember-me">Remember me</label>
             </div>
             <button className="sign-in-button">Sign In</button>
         </form>
