@@ -1,9 +1,14 @@
+import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
+import { useDispatch } from 'react-redux';
+import * as loginAction from '../../features/login.js';
 import './LoginForm.css';
 
 function LoginForm() {
+    const dispatch = useDispatch();
     const [username, setUserName] = useState('');
     const [password, setPassword] = useState('');
+    const navigate = useNavigate();
 
     async function SubmitLoginForm(event) {
         event.preventDefault();
@@ -21,7 +26,8 @@ function LoginForm() {
             .then((resp) => resp.json())
             .then((response) => {
                 if (response.status === 200) {
-                    console.log(response.body.token);
+                    dispatch(loginAction.set(true));
+                    navigate('/user');
                 } else {
                     console.log('error');
                 }
