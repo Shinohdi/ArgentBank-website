@@ -26,6 +26,7 @@ function LoginForm() {
             .then((resp) => resp.json())
             .then((response) => {
                 if (response.status === 200) {
+                    window.sessionStorage.setItem('token', response.body.token);
                     dispatch(loginAction.set(true));
                     navigate('/user');
                 } else {

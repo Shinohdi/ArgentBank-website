@@ -1,13 +1,24 @@
 import { NavLink } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { selectLogin } from '../../utils/selector';
+import { setVoid } from '../../features/user.js';
 import * as loginAction from '../../features/login.js';
 import logo from '../../img/argentBankLogo.png';
 import './Header.css';
 
+function LogOut(dispatch) {
+    dispatch(loginAction.set(false));
+    dispatch(setVoid());
+    window.sessionStorage.removeItem('token');
+}
+
 function Header() {
     const login = useSelector(selectLogin);
     const dispatch = useDispatch();
+
+    if (!login && window.sessionStorage.getItem('token')) {
+        dispatch(loginAction.set(true));
+    }
 
     return (
         <nav className="main-nav">
@@ -34,7 +45,7 @@ function Header() {
                         <NavLink
                             to="/"
                             className="main-nav-item"
-                            onClick={() => dispatch(loginAction.set(false))}
+                            onClick={() => LogOut(dispatch)}
                         >
                             <i className="fa fa-sign-out"></i>
                             Sign Out

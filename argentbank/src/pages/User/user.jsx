@@ -1,11 +1,20 @@
+import { useEffect } from 'react';
+import { fetchOrUptadeUser } from '../../features/user.js';
+import { useDispatch } from 'react-redux';
 import Account from '../../components/Account/Account.jsx';
 import EditName from '../../components/EditName/EditName.jsx';
 import './User.css';
 
 function User() {
+    const dispatch = useDispatch();
+
+    useEffect(() => {
+        dispatch(fetchOrUptadeUser);
+    }, [dispatch]);
+
     return (
-        <main class="main bg-dark">
-            <div class="header">
+        <main className="main bg-dark">
+            <div className="header">
                 <h1>
                     Welcome back
                     <br />

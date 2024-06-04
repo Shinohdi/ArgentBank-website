@@ -18,6 +18,7 @@
     "react-redux": "^9.1.2",
     "redux": "^5.0.1",
     "swagger-ui-express": "^4.1.4",
+    "util": "^0.12.5",
     "yamljs": "^0.3.0"
   },
   "scripts": {
