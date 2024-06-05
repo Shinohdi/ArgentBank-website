@@ -1,11 +1,14 @@
 import { useEffect } from 'react';
 import { fetchOrUptadeUser } from '../../features/user.js';
 import { useDispatch } from 'react-redux';
+import { selectUser } from '../../utils/selector.js';
+import { useSelector } from 'react-redux';
 import Account from '../../components/Account/Account.jsx';
 import EditName from '../../components/EditName/EditName.jsx';
 import './User.css';
 
 function User() {
+    const user = useSelector(selectUser).userData;
     const dispatch = useDispatch();
 
     useEffect(() => {
@@ -18,7 +21,7 @@ function User() {
                 <h1>
                     Welcome back
                     <br />
-                    Tony Stark!
+                    {user?.firstName} {user?.lastName} !
                 </h1>
                 <EditName />
             </div>

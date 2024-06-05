@@ -1,6 +1,7 @@
 import { NavLink } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { selectLogin } from '../../utils/selector';
+import { selectUser } from '../../utils/selector';
 import { setVoid } from '../../features/user.js';
 import * as loginAction from '../../features/login.js';
 import logo from '../../img/argentBankLogo.png';
@@ -14,6 +15,7 @@ function LogOut(dispatch) {
 
 function Header() {
     const login = useSelector(selectLogin);
+    const user = useSelector(selectUser).userData;
     const dispatch = useDispatch();
 
     if (!login && window.sessionStorage.getItem('token')) {
@@ -40,7 +42,7 @@ function Header() {
                     <div>
                         <NavLink to="/user" className="main-nav-item">
                             <i className="fa fa-user-circle"></i>
-                            Tony
+                            {user?.firstName}
                         </NavLink>
                         <NavLink
                             to="/"

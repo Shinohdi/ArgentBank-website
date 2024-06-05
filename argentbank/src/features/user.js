@@ -41,6 +41,11 @@ const userSlice = createSlice({
                 draft.error = null;
             }
         },
+        changeUserName: (draft, action) => {
+            if (draft.status === 'resolved') {
+                draft.userData.userName = action.payload;
+            }
+        },
         fetching: (draft) => {
             if (draft.status === 'void') {
                 // on passe en pending
@@ -93,6 +98,7 @@ const userSlice = createSlice({
 
 const { actions, reducer } = userSlice;
 
-export const { fetching, resolved, rejected, setVoid } = actions;
+export const { fetching, resolved, rejected, setVoid, changeUserName } =
+    actions;
 
 export default reducer;
