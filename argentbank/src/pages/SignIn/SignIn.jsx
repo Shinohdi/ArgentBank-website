@@ -1,5 +1,5 @@
 import './SignIn.css';
-import LoginForm from '../../components/Form/LoginForm';
+import LoginForm from '../../components/LoginForm/LoginForm';
 
 function SignIn() {
     return (

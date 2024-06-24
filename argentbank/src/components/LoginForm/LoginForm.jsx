@@ -8,6 +8,7 @@ function LoginForm() {
     const dispatch = useDispatch();
     const [username, setUserName] = useState('');
     const [password, setPassword] = useState('');
+    const [error, setError] = useState(false);
     const navigate = useNavigate();
 
     async function SubmitLoginForm(event) {
@@ -26,17 +27,25 @@ function LoginForm() {
             .then((resp) => resp.json())
             .then((response) => {
                 if (response.status === 200) {
+                    if (error) {
+                        setError(false);
+                    }
                     window.sessionStorage.setItem('token', response.body.token);
                     dispatch(loginAction.set(true));
                     navigate('/user');
                 } else {
-                    console.log('error');
+                    setError(true);
                 }
             });
     }
 
     return (
         <form onSubmit={(event) => SubmitLoginForm(event)}>
+            <div className="form-error">
+                {error ? (
+                    <p>Erreur dans l’identifiant ou le mot de passe</p>
+                ) : null}
+            </div>
             <div className="input-wrapper">
                 <label htmlFor="username">Username</label>
                 <input

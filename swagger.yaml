@@ -1,158 +1,334 @@
 swagger: '2.0'
 info:
-  title: Bank Argent API documentation
-  description: Contains all available API endpoints in this codebase
-  version: '1.0.0'
-  termsOfService: 'http://swagger.io/terms/'
+    title: Bank Argent API documentation
+    description: Contains all available API endpoints in this codebase
+    version: 1.0.0
+    termsOfService: http://swagger.io/terms/
 host: localhost:3001
 basePath: /api/v1
 schemes:
-  - http
+    - http
 paths:
-  /user/login:
-    post:
-      tags:
-        - User Module
-      summary: Login
-      description: API for Login
-      parameters:
-        - in: body
-          name: body
-          description: Login Payload
-          required: true
-          schema:
-            $ref: '#/definitions/Login'
-      produces:
-        - application/json
-      responses:
-        '200':
-          description: Login Successfully
-          schema:
-            $ref: '#/definitions/LoginResponse'
-        '400':
-          description: Invalid Fields
-        '500':
-          description: Internal Server Error
-  /user/signup:
-    post:
-      tags:
-        - User Module
-      summary: Signup
-      description: API for Signup
-      parameters:
-        - in: body
-          name: body
-          description: Signup Payload
-          required: true
-          schema:
-            $ref: '#/definitions/User'
-      produces:
-        - application/json
-      responses:
-        '200':
-          description: Signup Successfully
-          schema:
-            $ref: '#/definitions/ApiResponse'
-        '400':
-          description: Invalid Fields
-        '500':
-          description: Internal Server Error
-  /user/profile:
-    post:
-      security:
-        - Bearer: []
-      tags:
-        - User Module
-      summary: User Profile API
-      description: API for fetching a user profile
-      #produces:
-       # - application/json
-      responses:
-        '200':
-          description: User profile retrieved successully
-          schema:
-            $ref: '#/definitions/ApiResponse'
-        '400':
-          description: Invalid Fields
-        '500':
-          description: Internal Server Error
-    put:
-      security:
-        - Bearer: []
-      tags:
-        - User Module
-      summary: User Profile API
-      description: API for updating a user profile
-      parameters:
-        - in: body
-          name: body
-          description: Update user profile attributes
-          required: true
-          schema:
-            $ref: '#/definitions/UserProfile'
-      produces:
-        - application/json
-      responses:
-        '200':
-          description: User profile retrieved successully
-          schema:
-            $ref: '#/definitions/ApiResponse'
-        '400':
-          description: Invalid Fields
-        '500':
-          description: Internal Server Error
+    /user/login:
+        post:
+            tags:
+                - User Module
+            summary: Login
+            description: API for Login
+            parameters:
+                - in: body
+                  name: body
+                  description: Login Payload
+                  required: true
+                  schema:
+                      $ref: '#/definitions/Login'
+            produces:
+                - application/json
+            responses:
+                '200':
+                    description: Login Successfully
+                    schema:
+                        $ref: '#/definitions/LoginResponse'
+                '400':
+                    description: Invalid Fields
+                '500':
+                    description: Internal Server Error
+    /user/signup:
+        post:
+            tags:
+                - User Module
+            summary: Signup
+            description: API for Signup
+            parameters:
+                - in: body
+                  name: body
+                  description: Signup Payload
+                  required: true
+                  schema:
+                      $ref: '#/definitions/User'
+            produces:
+                - application/json
+            responses:
+                '200':
+                    description: Signup Successfully
+                    schema:
+                        $ref: '#/definitions/ApiResponse'
+                '400':
+                    description: Invalid Fields
+                '500':
+                    description: Internal Server Error
+    /user/profile:
+        post:
+            security:
+                - Bearer: []
+            tags:
+                - User Module
+            summary: User Profile API
+            description: API for fetching a user profile
+            responses:
+                '200':
+                    description: User profile retrieved successully
+                    schema:
+                        $ref: '#/definitions/ApiResponse'
+                '400':
+                    description: Invalid Fields
+                '500':
+                    description: Internal Server Error
+        put:
+            security:
+                - Bearer: []
+            tags:
+                - User Module
+            summary: User Profile API
+            description: API for updating a user profile
+            parameters:
+                - in: body
+                  name: body
+                  description: Update user profile attributes
+                  required: true
+                  schema:
+                      $ref: '#/definitions/UserProfile'
+            produces:
+                - application/json
+            responses:
+                '200':
+                    description: User profile retrieved successully
+                    schema:
+                        $ref: '#/definitions/ApiResponse'
+                '400':
+                    description: Invalid Fields
+                '500':
+                    description: Internal Server Error
+    /transaction:
+        get:
+            security:
+                - Bearer: []
+            tags:
+                - Transaction Module
+            summary: User Transactions API
+            description: API used to retrieve the user transactions
+            responses:
+                '200':
+                    description: Returns an array of the actual month transactions
+                    schema:
+                        $ref: '#/definitions/Transaction'
+                '400':
+                    description: Invalid fields
+                '500':
+                    description: Internal Server Error
+    /transaction/categories:
+        get:
+            tags:
+                - Transaction Module
+            summary: Transaction categories
+            description: An array of the different transactions categories
+            responses:
+                '200':
+                    description: Returns an array of the different transactions categories
+                    schema:
+                        $ref: '#/definitions/Categories'
+                '400':
+                    description: Invalid fields
+                '500':
+                    description: Internal Server Error
+    /transaction/{id}/details:
+        post:
+            security:
+                - Bearer: []
+            tags:
+                - Transaction Module
+            summary: Note transaction
+            description: Add a note in a transaction
+            parameters:
+                - in: path
+                  name: id
+                  description: ID of transaction to return
+                  required: true
+                  type: integer
+                  format: int64
+                - in: body
+                  name: body
+                  description: Note Payload
+                  required: true
+                  schema:
+                      $ref: '#/definitions/Note'
+            produces:
+                - application/json
+            responses:
+                '200':
+                    description: Add a note successfully
+                    schema:
+                        $ref: '#/definitions/ApiTrResponse'
+                '400':
+                    description: Invalid Fields
+                '500':
+                    description: Internal Server Error
+        put:
+            security:
+                - Bearer: []
+            tags:
+                - Transaction Module
+            summary: Category transaction
+            description: Uptade the category of a transaction
+            parameters:
+                - in: path
+                  name: id
+                  description: ID of transaction to return
+                  required: true
+                  type: integer
+                  format: int64
+                - in: body
+                  name: body
+                  description: Category Payload
+                  required: true
+                  schema:
+                      $ref: '#/definitions/Category'
+            produces:
+                - application/json
+            responses:
+                '200':
+                    description: Update a transaction category successfully
+                    schema:
+                        $ref: '#/definitions/ApiTrResponse'
+                '400':
+                    description: Invalid Fields
+                '500':
+                    description: Internal Server Error
 securityDefinitions:
-  Bearer:
-    type: apiKey
-    name: Authorization
-    in: header
+    Bearer:
+        type: apiKey
+        name: Authorization
+        in: header
 definitions:
-  User:
-    properties:
-      email:
-        type: string
-        description: user email
-      password:
-        type: string
-        description: user password
-      firstName:
-        type: string
-        description: user first name
-      lastName:
-        type: string
-        description: user last name
-      userName:
-        type: string
-        description: user public name
-  Login:
-    properties:
-      email:
-        type: string
-        description: user email
-      password:
-        type: string
-        description: user password
-  ApiResponse:
-    type: object
-    properties:
-      status:
-        type: integer
-      message:
-        type: string
-      body:
+    User:
+        properties:
+            email:
+                type: string
+                description: user email
+            password:
+                type: string
+                description: user password
+            firstName:
+                type: string
+                description: user first name
+            lastName:
+                type: string
+                description: user last name
+            userName:
+                type: string
+                description: user public name
+    Login:
+        properties:
+            email:
+                type: string
+                description: user email
+            password:
+                type: string
+                description: user password
+    ApiResponse:
         type: object
         properties:
-          id:
-            type: string
-          email:
-            type: string
-  LoginResponse:
-    type: object
-    properties:
-      token:
-        type: string
-  UserProfile:
-    type: object
-    properties:
-      userName:
-        type: string
+            status:
+                type: integer
+            message:
+                type: string
+            body:
+                type: object
+                properties:
+                    id:
+                        type: string
+                    email:
+                        type: string
+    LoginResponse:
+        type: object
+        properties:
+            token:
+                type: string
+    UserProfile:
+        type: object
+        properties:
+            userName:
+                type: string
+    Transaction:
+        type: array
+        items:
+            type: object
+            properties:
+                id:
+                    type: integer
+                    format: int64
+                    example: 1
+                date:
+                    type: string
+                    format: date
+                description:
+                    type: string
+                    example: Golden Sun Bakery
+                amount:
+                    type: number
+                    format: float
+                    example: 8
+                balance:
+                    type: number
+                    format: float
+                    example: 298
+                details:
+                    type: object
+                    properties:
+                        transactionType:
+                            type: string
+                            example: Electronic
+                        category:
+                            type: object
+                            properties:
+                                id:
+                                    type: integer
+                                    format: int64
+                                    example: 1
+                                name:
+                                    type: string
+                                    example: Food
+                        note:
+                            type: string
+                            example: Iorem ipsum
+    Categories:
+        type: array
+        items:
+            type: object
+            properties:
+                id:
+                    type: integer
+                    format: int64
+                    example: 1
+                name:
+                    type: string
+                    example: Food
+    Note:
+        properties:
+            note:
+                type: string
+                example: Iorem ipsum
+    Category:
+        properties:
+            category:
+                type: string
+                example: Food
+    ApiTrResponse:
+        type: object
+        properties:
+            transactionType:
+                type: string
+                example: Electronic
+            category:
+                type: object
+                properties:
+                    id:
+                        type: integer
+                        format: int64
+                        example: 1
+                    name:
+                        type: string
+                        example: Food
+            note:
+                type: string
+                example: Iorem ipsum
