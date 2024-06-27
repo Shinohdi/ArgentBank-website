@@ -1,8 +1,10 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { selectUser } from '../utils/selector';
+import { selectLogin } from '../utils/selector';
 
 export async function fetchOrUptadeUser(dispatch, getState) {
     const status = selectUser(getState()).status;
+    const token = selectLogin(getState()).token;
     if (status === 'pending' || status === 'updating') {
         return;
     }
@@ -13,9 +15,7 @@ export async function fetchOrUptadeUser(dispatch, getState) {
             {
                 method: 'POST',
                 headers: {
-                    Authorization: `Bearer ${window.sessionStorage.getItem(
-                        'token'
-                    )}`,
+                    Authorization: `Bearer ${token}`,
                 },
             }
         );
@@ -47,25 +47,20 @@ const userSlice = createSlice({
             }
         },
         fetching: (draft) => {
-            if (draft.status === 'void') {
-                // on passe en pending
-                draft.status = 'pending';
-                return;
+            switch (draft.status) {
+                case 'void':
+                    draft.status = 'pending';
+                    break;
+                case 'rejected':
+                    draft.error = null;
+                    draft.status = 'pending';
+                    break;
+                case 'resolved':
+                    draft.status = 'updating';
+                    break;
+                default:
+                    break;
             }
-            // si le statut est rejected
-            if (draft.status === 'rejected') {
-                // on supprime l'erreur et on passe en pending
-                draft.error = null;
-                draft.status = 'pending';
-                return;
-            }
-            // si le statut est resolved
-            if (draft.status === 'resolved') {
-                // on passe en updating (requête en cours mais des données sont déjà présentent)
-                draft.status = 'updating';
-                return;
-            }
-            // sinon l'action est ignorée
             return;
         },
         // resolved action & reducer

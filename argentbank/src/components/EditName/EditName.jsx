@@ -1,4 +1,5 @@
 import { selectUser } from '../../utils/selector';
+import { selectLogin } from '../../utils/selector';
 import { useSelector } from 'react-redux';
 import { changeUserName } from '../../features/user';
 import { useDispatch } from 'react-redux';
@@ -7,11 +8,12 @@ import './EditName.css';
 
 function EditName() {
     const user = useSelector(selectUser).userData;
+    const token = useSelector(selectLogin).token;
     const dispatch = useDispatch();
     const [isOpen, setIsOpen] = useState(false);
     const [userName, setUserName] = useState(user?.userName);
 
-    async function handleSubmit(event) {
+    async function HandleSubmit(event) {
         event.preventDefault();
         const newUserName = {
             userName: userName,
@@ -25,33 +27,40 @@ function EditName() {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
-                    Authorization: `Bearer ${window.sessionStorage.getItem(
-                        'token'
-                    )}`,
+                    Authorization: `Bearer ${token}`,
                 },
                 body: body,
             }
         );
         const resp = await response.json();
-        await dispatch(changeUserName(resp.body.userName));
-        setUserName(resp.body.userName);
-        setIsOpen(false);
+
+        if (resp.status === '200') {
+            await dispatch(changeUserName(resp.body.userName));
+            setUserName(resp.body.userName);
+            setIsOpen(false);
+        } else {
+            return;
+        }
     }
 
-    function cancelEdit() {
-        setIsOpen(false);
+    function HandleEdit(action) {
+        setIsOpen(action);
         setUserName(user?.userName);
     }
 
     return !isOpen ? (
-        <button className="edit-button" onClick={() => setIsOpen(true)}>
+        <button className="edit-button" onClick={() => HandleEdit(true)}>
             Edit Name
         </button>
     ) : (
         <div>
             <form
                 className="edit-form"
-                onSubmit={(event) => handleSubmit(event)}
+                onSubmit={(event) =>
+                    userName === ''
+                        ? event.preventDefault()
+                        : HandleSubmit(event)
+                }
             >
                 <div>
                     <label htmlFor="username">User name: </label>
@@ -89,7 +98,7 @@ function EditName() {
                     </button>
                     <button
                         className="edit-button"
-                        onClick={() => cancelEdit()}
+                        onClick={() => HandleEdit(false)}
                     >
                         Cancel
                     </button>

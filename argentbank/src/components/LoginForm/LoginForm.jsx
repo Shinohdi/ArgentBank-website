@@ -30,8 +30,8 @@ function LoginForm() {
                     if (error) {
                         setError(false);
                     }
-                    window.sessionStorage.setItem('token', response.body.token);
-                    dispatch(loginAction.set(true));
+                    dispatch(loginAction.setToken(response.body.token));
+                    dispatch(loginAction.setConnected(true));
                     navigate('/user');
                 } else {
                     setError(true);

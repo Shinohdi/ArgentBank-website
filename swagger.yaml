@@ -99,7 +99,24 @@ paths:
                     description: Invalid Fields
                 '500':
                     description: Internal Server Error
-    /transaction:
+    /user/accounts:
+        get:
+            security:
+                - Bearer: []
+            tags:
+                - User Module
+            summary: User Accounts API
+            description: API used to retrieve the user accounts
+            responses:
+                '200':
+                    description: Returns an array of the different user accounts
+                    schema:
+                        $ref: '#/definitions/Accounts'
+                '400':
+                    description: Invalid fields
+                '500':
+                    description: Internal Server Error
+    /transactions:
         get:
             security:
                 - Bearer: []
@@ -111,7 +128,7 @@ paths:
                 '200':
                     description: Returns an array of the actual month transactions
                     schema:
-                        $ref: '#/definitions/Transaction'
+                        $ref: '#/definitions/Transactions'
                 '400':
                     description: Invalid fields
                 '500':
@@ -249,7 +266,25 @@ definitions:
         properties:
             userName:
                 type: string
-    Transaction:
+    Accounts:
+        type: array
+        items:
+            type: object
+            properties:
+                id:
+                    type: integer
+                    format: int64
+                    example: 1
+                name:
+                    type: string
+                    example: Argent Bank Checking (x8349)
+                amount:
+                    type: number
+                    example: 2,082.79
+                balance:
+                    type: string
+                    example: current
+    Transactions:
         type: array
         items:
             type: object
